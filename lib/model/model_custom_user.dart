@@ -1,5 +1,6 @@
 // import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:srac_app/enum/genre.dart';
+import 'package:srac_app/model/model_flowerpot.dart';
 
 class CustomUser {
   //instanciamos la base de datos
@@ -13,17 +14,20 @@ class CustomUser {
   String? password;
   final eGenere genere; //enum con los generos
   final int age;
+  final DateTime? birthDate;
+  final List<Flowerpot> flowerpotList;
 
   static CustomUser? usuarioActual;
 
-  CustomUser({
-    required this.name,
-    required this.lastName,
-    required this.mail,
-    required this.password,
-    required this.age,
-    this.genere = eGenere.none, // Valor por defecto
-  });
+  CustomUser(
+      {required this.name,
+      required this.lastName,
+      required this.mail,
+      required this.password,
+      required this.age,
+      this.genere = eGenere.none, // Valor por defecto
+      required this.birthDate,
+      this.flowerpotList = const []});
 
   // void getUsers() async {
   //   //referencia a que colección vamos a utilizar

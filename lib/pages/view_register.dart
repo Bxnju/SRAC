@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:srac_app/enum/genre.dart';
 import 'package:srac_app/pages/view_login.dart';
+import 'package:srac_app/services/database_services.dart';
 
 class Register extends StatefulWidget {
   const Register({
@@ -393,10 +394,24 @@ class _RegisterState extends State<Register> {
                             child: GestureDetector(
                               onTap: () async {
                                 if (_formRegisterKey.currentState!.validate()) {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => const Login()));
+                                  final success =
+                                      await DatabaseServices.registerUser(
+                                          context: context,
+                                          name: cName.text,
+                                          lastName: cLastname.text,
+                                          mail: cMail.text,
+                                          password: cPassword.text,
+                                          age: DatabaseServices.calculateAge(
+                                              cBirthdate!),
+                                          genere: cGender,
+                                          birthDate: cBirthdate!);
+                                  if (success) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const Login()));
+                                  }
                                 }
                               },
                               child: Container(
