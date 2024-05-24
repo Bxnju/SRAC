@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:srac_app/enum/genre.dart';
@@ -50,9 +49,9 @@ class _RegisterState extends State<Register> {
         return Theme(
           // Aquí puedes personalizar el tema del selector de fecha
           data: ThemeData.light().copyWith(
-            colorScheme: ColorScheme.light(
+            colorScheme: const ColorScheme.light(
                 primary: Colors.green), // Cambia el color primario a verde
-            buttonTheme: ButtonThemeData(
+            buttonTheme: const ButtonThemeData(
               textTheme: ButtonTextTheme.primary,
             ),
           ),
@@ -72,83 +71,54 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 37, 173, 33),
+        backgroundColor: const Color(0xFFBFD4A4),
         body: Stack(
           children: [
-            Image.asset(
-              'assets/leafs_01_bg.jpg',
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-            ),
-            BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-              child: ListView(
-                children: [
-                  const SizedBox(
-                    height: 80,
+            ListView(
+              children: [
+                const SizedBox(
+                  height: 80,
+                ),
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  margin: const EdgeInsets.only(left: 40, right: 40, top: 30),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF32470F),
+                    borderRadius: BorderRadius.circular(
+                        40), // Ajusta el radio del borde aquí
                   ),
-
-                  Container(
-                    color: Colors.transparent,
-                    child: const Center(
-                        child: Text(
-                      'Registrate',
-                      maxLines: 3,
-                      style: TextStyle(
-                          fontFamily: 'Roboto',
-                          color: Colors.white,
-                          fontSize: 45,
-                          fontWeight: FontWeight.bold),
-                    )),
-                  ),
-
-                  Center(
-                      child: Container(
-                    margin: const EdgeInsets.only(top: 10),
-                    child: const Text(
-                      'Comienza a automatizar tus cultivos',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
-                    ),
+                  child: const Center(
+                      child: Text(
+                    'Registrate',
+                    maxLines: 3,
+                    style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        fontSize: 45,
+                        fontWeight: FontWeight.bold),
                   )),
-
-                  const SizedBox(
-                    height: 80,
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Container(
+                  padding: const EdgeInsets.only(
+                      top: 20, bottom: 20, left: 15, right: 15),
+                  margin: const EdgeInsets.only(
+                      left: 20, right: 20, top: 10, bottom: 20),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFDBE9C9),
+                    borderRadius: BorderRadius.circular(
+                        40), // Ajusta el radio del borde aquí
                   ),
-
-                  // ----------- TEXT REGISTER ------------
-
-                  Container(
-                      margin: const EdgeInsets.only(left: 30),
-                      child: const Text(
-                        'Dejanos conocerte mejor',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold),
-                      )),
-
-                  Form(
+                  child: Form(
                       key: _formRegisterKey,
                       child: Column(
                         children: [
                           // ----------- INPUT NAME ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: TextFormField(
                               //Name Controller
                               controller: cName,
@@ -156,10 +126,12 @@ class _RegisterState extends State<Register> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Nombre',
+                                hintStyle: const TextStyle(fontSize: 20),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(25),
                                     borderSide: BorderSide.none),
                               ),
+                              style: const TextStyle(fontSize: 20),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Por favor ingrese un nombre.\n";
@@ -176,17 +148,7 @@ class _RegisterState extends State<Register> {
                           // ----------- INPUT LASTNAME ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: TextFormField(
                               //LastName Controller
                               controller: cLastname,
@@ -194,10 +156,12 @@ class _RegisterState extends State<Register> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Apellidos',
+                                hintStyle: const TextStyle(fontSize: 20),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(25),
                                     borderSide: BorderSide.none),
                               ),
+                              style: const TextStyle(fontSize: 20),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Por favor ingrese un apellido.\n";
@@ -214,17 +178,7 @@ class _RegisterState extends State<Register> {
                           // ----------- INPUT GENDER ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: DropdownButtonFormField<String>(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -259,27 +213,19 @@ class _RegisterState extends State<Register> {
                                 filled: true,
                                 fillColor: const Color(0xFFFFFFFF),
                                 hintText: 'Seleccione su género',
+                                hintStyle: const TextStyle(fontSize: 20),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(25),
                                     borderSide: BorderSide.none),
                               ),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ),
 
                           // ----------- INPUT BIRTHDATE ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
@@ -289,7 +235,7 @@ class _RegisterState extends State<Register> {
                                     height: 56,
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(25),
                                     ),
                                     padding: const EdgeInsets.all(10),
                                     child: Row(
@@ -297,7 +243,7 @@ class _RegisterState extends State<Register> {
                                         const Text(
                                           'Fecha de nacimiento:',
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 20,
                                               color: Color(0xFF707070)),
                                         ),
                                         const SizedBox(width: 10),
@@ -305,7 +251,7 @@ class _RegisterState extends State<Register> {
                                           "${selectedDate.toLocal()}"
                                               .split(' ')[0],
                                           style: const TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 15,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ],
@@ -319,17 +265,7 @@ class _RegisterState extends State<Register> {
                           // ----------- INPUT EMAIL ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: TextFormField(
                               //Email Controller
                               controller: cMail,
@@ -337,10 +273,12 @@ class _RegisterState extends State<Register> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Correo electrónico',
+                                hintStyle: const TextStyle(fontSize: 20),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(25),
                                     borderSide: BorderSide.none),
                               ),
+                              style: const TextStyle(fontSize: 20),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Por favor ingrese un correo electrónico.\n";
@@ -355,17 +293,7 @@ class _RegisterState extends State<Register> {
                           // ----------- INPUT PASSWORD ------------
 
                           Container(
-                            margin: const EdgeInsets.only(
-                                top: 10, left: 30, right: 30),
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 3))
-                              ],
-                            ),
+                            margin: const EdgeInsets.only(top: 10),
                             child: TextFormField(
                               //Password Controller
                               controller: cPassword,
@@ -373,10 +301,12 @@ class _RegisterState extends State<Register> {
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Contraseña',
+                                hintStyle: const TextStyle(fontSize: 20),
                                 border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(25),
                                     borderSide: BorderSide.none),
                               ),
+                              style: const TextStyle(fontSize: 20),
                               validator: (value) {
                                 if (value!.isEmpty) {
                                   return "Por favor ingrese una contraseña.\n";
@@ -415,33 +345,33 @@ class _RegisterState extends State<Register> {
                                 }
                               },
                               child: Container(
-                                margin:
-                                    const EdgeInsets.only(top: 20, bottom: 30),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        spreadRadius: 5,
-                                        blurRadius: 7,
-                                        offset: const Offset(0, 3))
-                                  ],
-                                ),
-                                height: 50,
-                                width: 100,
-                                child: const Icon(
-                                  Icons.check,
-                                  color: Colors.blueAccent,
-                                  size: 30,
-                                ),
-                              ),
+                                  margin: const EdgeInsets.only(top: 20),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: const Color(0xFF32470F),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.25),
+                                          spreadRadius: 3,
+                                          offset: const Offset(0, 3))
+                                    ],
+                                  ),
+                                  height: 70,
+                                  width: 150,
+                                  child: const Center(
+                                    child: Text("Registrar",
+                                        maxLines: 3,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold)),
+                                  )),
                             ),
                           )
                         ],
                       )),
-                ],
-              ),
+                ),
+              ],
             ),
             Positioned(
               top: 25,
@@ -451,17 +381,16 @@ class _RegisterState extends State<Register> {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(25),
-                    color: Colors.white,
+                    color: const Color(0xFF32470F),
                     boxShadow: [
                       BoxShadow(
                           color: Colors.black.withOpacity(0.2),
-                          spreadRadius: 5,
-                          blurRadius: 7,
+                          spreadRadius: 2,
                           offset: const Offset(0, 3))
                     ],
                   ),
-                  height: 50,
-                  width: 50,
+                  height: 60,
+                  width: 60,
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
@@ -479,18 +408,24 @@ class _RegisterState extends State<Register> {
 
                               var tween = Tween(begin: begin, end: end)
                                   .chain(CurveTween(curve: curve));
+                              var curvedAnimation = CurvedAnimation(
+                                parent: animation,
+                                curve: curve,
+                              );
 
                               return SlideTransition(
-                                position: animation.drive(tween),
+                                position: tween.animate(curvedAnimation),
                                 child: child,
                               );
                             },
+                            transitionDuration: Duration(
+                                milliseconds: 700), // Ajusta la duración aquí
                           ),
                         );
                       },
                       child: const Icon(
                         Icons.arrow_back,
-                        color: Colors.blueAccent,
+                        color: Colors.white,
                         size: 30,
                       ),
                     ),
