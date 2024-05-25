@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:srac_app/pages/view_crops.dart';
 // import 'package:srac_app/model/custom_user.dart';
-import 'dart:ui';
 
 import 'package:srac_app/pages/view_login.dart';
+import 'package:srac_app/pages/view_user_info.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -14,7 +15,7 @@ class Home extends StatelessWidget {
         body: Stack(
           children: [
             Container(
-              color: Color(0xFFBFD4A4),
+              color: const Color(0xFFBFD4A4),
               child: ListView(
                 children: [
                   const SizedBox(
@@ -22,22 +23,6 @@ class Home extends StatelessWidget {
                   ),
                   const Column(
                     children: [
-                      Center(
-                          child: Text(
-                        'Bienvenido!',
-                        maxLines: 3,
-                        style: TextStyle(
-                          color: Color(0xFF32470F),
-                          fontSize: 55,
-                          fontWeight: FontWeight.bold,
-                          // shadows: [
-                          //   Shadow(
-                          //     color: Color.fromARGB(205, 0, 0, 0),
-                          //     blurRadius: 15,
-                          //   ),
-                          // ],
-                        ),
-                      )),
                       Center(
                           child: Text(
                         "Empieza a automatizar con",
@@ -63,21 +48,44 @@ class Home extends StatelessWidget {
                     child: Center(
                       child: GestureDetector(
                         onTap: () {
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const Tasks()));
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const Crops(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                var begin = const Offset(-1.0, 0.0);
+                                var end = Offset.zero;
+                                var curve = Curves.easeInOut;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var curvedAnimation = CurvedAnimation(
+                                  parent: animation,
+                                  curve: curve,
+                                );
+
+                                return SlideTransition(
+                                  position: tween.animate(curvedAnimation),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: const Duration(
+                                  milliseconds: 700), // Ajusta la duración aquí
+                            ),
+                          );
                         },
                         child: Container(
                             margin: const EdgeInsets.only(top: 50),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Color(0xFF32470F),
+                              color: const Color(0xFF32470F),
                               boxShadow: [
                                 BoxShadow(
                                     color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 5,
-                                    blurRadius: 13,
+                                    spreadRadius: 3,
                                     offset: const Offset(0, 3))
                               ],
                             ),
@@ -122,7 +130,7 @@ class Home extends StatelessWidget {
       left: 0,
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 205, 233, 201),
+          color: const Color.fromARGB(255, 205, 233, 201),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.2),
@@ -137,9 +145,34 @@ class Home extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             GestureDetector(
-              onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const Tasks()));
+              onTap: () async {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const Crops(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(-1.0, 0.0);
+                      var end = Offset.zero;
+                      var curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var curvedAnimation = CurvedAnimation(
+                        parent: animation,
+                        curve: curve,
+                      );
+
+                      return SlideTransition(
+                        position: tween.animate(curvedAnimation),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(
+                        milliseconds: 700), // Ajusta la duración aquí
+                  ),
+                );
               },
               child: Image.asset(
                 'assets/flowerpot_icon.png',
@@ -149,10 +182,7 @@ class Home extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Home()));
-              },
+              onTap: () {},
               child: Image.asset(
                 'assets/home_icon.png',
                 width: 70,
@@ -166,10 +196,10 @@ class Home extends StatelessWidget {
                   context,
                   PageRouteBuilder(
                     pageBuilder: (context, animation, secondaryAnimation) =>
-                        const Login(),
+                        const UserInfo(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      var begin = const Offset(0.0, -1.0);
+                      var begin = const Offset(1.0, 0.0);
                       var end = Offset.zero;
                       var curve = Curves.easeInOut;
 

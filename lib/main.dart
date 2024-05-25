@@ -20,9 +20,9 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           fontFamily: 'Poppins',
-          primaryColor: Colors.blue,
+          primaryColor: Colors.green,
           useMaterial3: true,
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.green,
         ),
         home: const Login());
   }

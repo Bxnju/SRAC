@@ -38,11 +38,13 @@ class _LoginState extends State<Login> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        'assets/logo.png',
-                        width: 400,
-                        height: 200,
-                        fit: BoxFit.contain,
+                      Center(
+                        child: Image.asset(
+                          'assets/logo.png',
+                          width: 380,
+                          height: 180,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ],
                   ),
@@ -73,15 +75,6 @@ class _LoginState extends State<Login> {
                       Container(
                         margin:
                             const EdgeInsets.only(top: 10, left: 30, right: 30),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3))
-                          ],
-                        ),
                         child: TextFormField(
                           controller: cMail,
                           decoration: InputDecoration(
@@ -90,7 +83,7 @@ class _LoginState extends State<Login> {
                             hintText: 'Correo electrónico',
                             hintStyle: const TextStyle(fontSize: 20),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(25),
                                 borderSide: BorderSide.none),
                           ),
                           style: const TextStyle(fontSize: 20),
@@ -112,15 +105,6 @@ class _LoginState extends State<Login> {
                       Container(
                         margin:
                             const EdgeInsets.only(top: 10, left: 30, right: 30),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: const Offset(0, 3))
-                          ],
-                        ),
                         child: TextFormField(
                           controller: cPassword,
                           obscureText: true,
@@ -130,7 +114,7 @@ class _LoginState extends State<Login> {
                             hintText: 'Contraseña',
                             hintStyle: const TextStyle(fontSize: 20),
                             border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(25),
                                 borderSide: BorderSide.none),
                           ),
                           style: const TextStyle(fontSize: 20),
@@ -152,10 +136,10 @@ class _LoginState extends State<Login> {
                             PageRouteBuilder(
                               pageBuilder:
                                   (context, animation, secondaryAnimation) =>
-                                      Register(),
+                                      const Register(),
                               transitionsBuilder: (context, animation,
                                   secondaryAnimation, child) {
-                                var begin = Offset(1.0, 0.0);
+                                var begin = const Offset(1.0, 0.0);
                                 var end = Offset.zero;
                                 var curve = Curves.easeInOut;
 
@@ -171,7 +155,7 @@ class _LoginState extends State<Login> {
                                   child: child,
                                 );
                               },
-                              transitionDuration: Duration(
+                              transitionDuration: const Duration(
                                   milliseconds: 700), // Ajusta la duración aquí
                             ),
                           );
@@ -199,7 +183,7 @@ class _LoginState extends State<Login> {
                       Center(
                         child: GestureDetector(
                           onTap: () async {
-                            Navigator.pushReplacement(
+                            Navigator.push(
                               context,
                               PageRouteBuilder(
                                 pageBuilder:
@@ -213,12 +197,19 @@ class _LoginState extends State<Login> {
 
                                   var tween = Tween(begin: begin, end: end)
                                       .chain(CurveTween(curve: curve));
+                                  var curvedAnimation = CurvedAnimation(
+                                    parent: animation,
+                                    curve: curve,
+                                  );
 
                                   return SlideTransition(
-                                    position: animation.drive(tween),
+                                    position: tween.animate(curvedAnimation),
                                     child: child,
                                   );
                                 },
+                                transitionDuration: const Duration(
+                                    milliseconds:
+                                        700), // Ajusta la duración aquí
                               ),
                             );
                             cMail.clear();
