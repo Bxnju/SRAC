@@ -135,7 +135,7 @@ class DatabaseServices {
                   ? eGenere.female
                   : eGenere.none,
           birthDate: convStringToDate(userData["fecha_nacimiento"]),
-          lastName: userData["apellidos"],
+          lastName: userData["apellido"],
         );
 
         return auxUser;

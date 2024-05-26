@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:srac_app/model/model_custom_user.dart';
 import 'dart:ui';
 import 'package:srac_app/pages/view_register.dart';
 import 'package:srac_app/services/database_services.dart';
@@ -19,6 +20,14 @@ class _LoginState extends State<Login> {
 
   final TextEditingController cMail = TextEditingController();
   final TextEditingController cPassword = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Inicializar los controladores con los valores del usuario logueado
+    // Por ejemplo:
+    CustomUser.usuarioActual = null;
+  }
 
   final RegExp vMail =
       RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
@@ -184,44 +193,46 @@ class _LoginState extends State<Login> {
                       Center(
                         child: GestureDetector(
                           onTap: () async {
-                            print('Intentando obtener el usuario con correo: $cMail');
-                            bool loginSuccess = await DatabaseServices.login(
-                              mail: cMail.text,
-                              password: cPassword.text,
-                            );
-                            if (loginSuccess) {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      const Home(),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    var begin = const Offset(0.0, 1.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.easeInOut;
+                            if (_formLoginKey.currentState!.validate()) {
+                              final success = await DatabaseServices.login(
+                                  mail: cMail.text, password: cPassword.text);
 
-                                    var tween = Tween(begin: begin, end: end)
-                                        .chain(CurveTween(curve: curve));
-                                    var curvedAnimation = CurvedAnimation(
-                                      parent: animation,
-                                      curve: curve,
-                                    );
+                              if (success) {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        const Home(),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      var begin = const Offset(0.0, 1.0);
+                                      var end = Offset.zero;
+                                      var curve = Curves.easeInOut;
 
-                                    return SlideTransition(
-                                      position: tween.animate(curvedAnimation),
-                                      child: child,
-                                    );
-                                  },
-                                  transitionDuration: const Duration(
-                                      milliseconds:
-                                          700), // Ajusta la duración aquí
-                                ),
-                              );
-                              cMail.clear();
-                              cPassword.clear();
-                            } else {}
+                                      var tween = Tween(begin: begin, end: end)
+                                          .chain(CurveTween(curve: curve));
+                                      var curvedAnimation = CurvedAnimation(
+                                        parent: animation,
+                                        curve: curve,
+                                      );
+
+                                      return SlideTransition(
+                                        position:
+                                            tween.animate(curvedAnimation),
+                                        child: child,
+                                      );
+                                    },
+                                    transitionDuration: const Duration(
+                                        milliseconds:
+                                            700), // Ajusta la duración aquí
+                                  ),
+                                );
+
+                                cMail.clear();
+                                cPassword.clear();
+                              } else {}
+                            }
                           },
                           child: Container(
                             margin: const EdgeInsets.only(top: 20),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:srac_app/model/model_custom_user.dart';
 import 'package:srac_app/pages/view_crops.dart';
@@ -25,14 +26,10 @@ class _UserInfoState extends State<UserInfo> {
     super.initState();
     // Inicializar los controladores con los valores del usuario logueado
     // Por ejemplo:
-    // nameController.text = CustomUser.usuarioActual!.name;
-    // lastNameController.text = CustomUser.usuarioActual!.lastName;
-    // mailController.text = CustomUser.usuarioActual!.mail;
-    // passwordController.text = CustomUser.usuarioActual!.password!;
     nameController.text = CustomUser.usuarioActual!.name;
     lastNameController.text = CustomUser.usuarioActual!.lastName;
     mailController.text = CustomUser.usuarioActual!.mail;
-    passwordController.text = CustomUser.usuarioActual!.password!;
+    passwordController.text = CustomUser.usuarioActual!.password;
   }
 
   @override
@@ -45,9 +42,20 @@ class _UserInfoState extends State<UserInfo> {
   }
 
   void updateUserProfile(String field, String value) {
-    // Aquí se actualiza la base de datos
     // Por ejemplo, usando Firebase:
-    // FirebaseFirestore.instance.collection('usuarios').doc(CustomUser.usuarioActual!.mail).update({field: value});
+    FirebaseFirestore.instance
+        .collection('Usuarios')
+        .doc(CustomUser.usuarioActual!.mail)
+        .update({field: value});
+    if (field == 'nombre') {
+      CustomUser.usuarioActual!.name = value;
+    } else if (field == 'apellidos') {
+      CustomUser.usuarioActual!.lastName = value;
+    } else if (field == 'correo') {
+      CustomUser.usuarioActual!.mail = value;
+    } else if (field == 'contraseña') {
+      CustomUser.usuarioActual!.password = value;
+    }
     print('Updated $field to $value');
   }
 
@@ -84,18 +92,25 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                     ),
                   ),
-                  const Center(
-                      child: Text(
-                    'Nombre Usuario'
-                    // "${CustomUser.usuarioActual!.name} ${CustomUser.usuarioActual!.lastName}",
-                    ,
-                    maxLines: 3,
-                    style: TextStyle(
-                        fontFamily: 'Roboto',
-                        color: Color(0xFF32470F),
-                        fontSize: 45,
-                        fontWeight: FontWeight.bold),
-                  )),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    margin: const EdgeInsets.only(left: 40, right: 40, top: 30),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF32470F),
+                      borderRadius: BorderRadius.circular(
+                          40), // Ajusta el radio del borde aquí
+                    ),
+                    child: const Center(
+                        child: Text(
+                      'Editar datos',
+                      maxLines: 3,
+                      style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 45,
+                          fontWeight: FontWeight.bold),
+                    )),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -122,10 +137,10 @@ class _UserInfoState extends State<UserInfo> {
                             ),
                             style: const TextStyle(fontSize: 23),
                             onFieldSubmitted: (value) {
-                              updateUserProfile('name', value);
+                              updateUserProfile('nombre', value);
                             },
                             onChanged: (value) {
-                              updateUserProfile('name', value);
+                              updateUserProfile('nombre', value);
                             },
                           ),
                         ),
@@ -151,10 +166,10 @@ class _UserInfoState extends State<UserInfo> {
                             ),
                             style: const TextStyle(fontSize: 23),
                             onFieldSubmitted: (value) {
-                              updateUserProfile('lastname', value);
+                              updateUserProfile('apellidos', value);
                             },
                             onChanged: (value) {
-                              updateUserProfile('name', value);
+                              updateUserProfile('apellidos', value);
                             },
                           ),
                         ),
@@ -181,10 +196,10 @@ class _UserInfoState extends State<UserInfo> {
                             style: const TextStyle(fontSize: 23),
                             keyboardType: TextInputType.emailAddress,
                             onFieldSubmitted: (value) {
-                              updateUserProfile('email', value);
+                              updateUserProfile('correo', value);
                             },
                             onChanged: (value) {
-                              updateUserProfile('email', value);
+                              updateUserProfile('correo', value);
                             },
                           ),
                         ),
@@ -192,6 +207,7 @@ class _UserInfoState extends State<UserInfo> {
                           margin: const EdgeInsets.only(top: 20),
                           child: TextFormField(
                             controller: passwordController,
+                            obscureText: true,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
@@ -211,10 +227,10 @@ class _UserInfoState extends State<UserInfo> {
                             style: const TextStyle(fontSize: 23),
                             keyboardType: TextInputType.phone,
                             onFieldSubmitted: (value) {
-                              updateUserProfile('phone', value);
+                              updateUserProfile('contraseña', value);
                             },
                             onChanged: (value) {
-                              updateUserProfile('phone', value);
+                              updateUserProfile('contraseña', value);
                             },
                           ),
                         ),

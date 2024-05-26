@@ -2,6 +2,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:srac_app/enum/genre.dart';
+import 'package:srac_app/pages/view_home.dart';
 import 'package:srac_app/pages/view_login.dart';
 import 'package:srac_app/services/database_services.dart';
 
@@ -340,7 +341,10 @@ class _RegisterState extends State<Register> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                const Login()));
+                                                const Home()));
+                                  } else {
+                                    print(
+                                        "Ya el usuario existe en la base de datos");
                                   }
                                 }
                               },

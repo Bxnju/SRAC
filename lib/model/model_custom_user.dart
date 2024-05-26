@@ -8,10 +8,10 @@ class CustomUser {
   // static final CollectionReference _userCollection =
   //     _firestore.collection('Users');
 
-  final String name;
-  final String lastName;
-  final String mail;
-  String? password;
+  String name;
+  String lastName;
+  String mail;
+  String password;
   final eGenere genere; //enum con los generos
   final DateTime? birthDate;
   final List<Flowerpot> flowerpotList;
