@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:srac_app/pages/view_add_crop.dart';
 import 'package:srac_app/pages/view_crop_detail.dart';
 import 'package:srac_app/pages/view_home.dart';
 // import 'package:srac_app/model/custom_user.dart';
@@ -206,7 +207,36 @@ class _CropsState extends State<Crops> {
                   width: 80,
                   child: Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder:
+                                (context, animation, secondaryAnimation) =>
+                                    const AddCrop(),
+                            transitionsBuilder: (context, animation,
+                                secondaryAnimation, child) {
+                              var begin = const Offset(0.0, -1.0);
+                              var end = Offset.zero;
+                              var curve = Curves.easeInOut;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var curvedAnimation = CurvedAnimation(
+                                parent: animation,
+                                curve: curve,
+                              );
+
+                              return SlideTransition(
+                                position: tween.animate(curvedAnimation),
+                                child: child,
+                              );
+                            },
+                            transitionDuration: const Duration(
+                                milliseconds: 800), // Ajusta la duración aquí
+                          ),
+                        );
+                      },
                       child: const Icon(
                         Icons.add,
                         color: Colors.white,
