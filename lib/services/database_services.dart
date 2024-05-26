@@ -5,7 +5,7 @@ import 'package:flutter/widgets.dart';
 
 class DatabaseServices {
   static final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  static CollectionReference usersCollection = firestore.collection("Users");
+  static CollectionReference usersCollection = firestore.collection("Usuarios");
 
   static Future<bool> userExists({required String userMail}) async {
     try {
@@ -51,19 +51,18 @@ class DatabaseServices {
           lastName: lastName,
           mail: mail,
           password: password,
-          age: age,
           genere: genere,
           birthDate: birthDate,
         );
 
         await docRef.set({
-          "Mail": mail,
-          "Password": password,
-          "Name": name,
-          "LastName": lastName,
-          "BirthDate": convDateToString(birthDate),
-          "Age": age.toString(),
-          "Genere": convGenderToString(genere),
+          "correo": mail,
+          "contraseña": password,
+          "nombre": name,
+          "apellido": lastName,
+          "fecha_nacimiento": convDateToString(birthDate),
+          "genero": convGenderToString(genere),
+          "Maceta": []
         });
 
         return true;
@@ -91,9 +90,9 @@ class DatabaseServices {
     try {
       switch (genero) {
         case eGenere.male:
-          return "Male";
+          return "Masculino";
         case eGenere.female:
-          return "Female";
+          return "Femenino";
         default:
           return "None"; // Valor predeterminado en caso de un género desconocido
       }
@@ -115,6 +114,78 @@ class DatabaseServices {
       return edad;
     } catch (e) {
       throw Exception("Error al calcular la edad: $e");
+    }
+  }
+
+  static Future<CustomUser?> getUser({required String userMail}) async {
+    try {
+      print('Intentando obtener el usuario con correo: $userMail');
+      DocumentSnapshot snapDoc = await usersCollection.doc(userMail).get();
+      if (snapDoc.exists) {
+        Map<String, dynamic>? userData =
+            snapDoc.data() as Map<String, dynamic>?;
+
+        CustomUser auxUser = CustomUser(
+          name: userData!["nombre"],
+          mail: userData["correo"],
+          password: userData["contraseña"],
+          genere: userData["genero"] == "Masculino"
+              ? eGenere.male
+              : userData["Genere"] == "Femenino"
+                  ? eGenere.female
+                  : eGenere.none,
+          birthDate: convStringToDate(userData["fecha_nacimiento"]),
+          lastName: userData["apellidos"],
+        );
+
+        return auxUser;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception("Hubo un error en getUser ${e.toString()}");
+    }
+  }
+
+  static DateTime convStringToDate(String fecha) {
+    try {
+      // Divide la cadena en día, mes y año
+      List<String> partes = fecha.split('/');
+
+      if (partes.length != 3) {
+        throw const FormatException("El formato de fecha debe ser dd/mm/yyyy");
+      }
+
+      int dia = int.parse(partes[0]);
+      int mes = int.parse(partes[1]);
+      int anio = int.parse(partes[2]);
+
+      // Crea y devuelve el objeto DateTime
+      return DateTime(anio, mes, dia);
+    } catch (e) {
+      throw Exception("Error al convertir la fecha: $e");
+    }
+  }
+
+  static Future<bool> login(
+      {required String mail, required String password}) async {
+    try {
+      CustomUser? user = await getUser(userMail: mail);
+
+      if (user != null) {
+        if (password == user.password) {
+          CustomUser.usuarioActual = user;
+          return true;
+        } else {
+          // CODIGO DE CONTROL CUANDO LA CONTRASEÑA ES INCORRECTA
+          return false;
+        }
+      } else {
+        // CODIGO DE CONTROL CUANDO NO EXISTE USUARIO
+        return false;
+      }
+    } catch (e) {
+      throw Exception("Hubo un error en login $e");
     }
   }
 }

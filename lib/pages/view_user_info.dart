@@ -29,10 +29,10 @@ class _UserInfoState extends State<UserInfo> {
     // lastNameController.text = CustomUser.usuarioActual!.lastName;
     // mailController.text = CustomUser.usuarioActual!.mail;
     // passwordController.text = CustomUser.usuarioActual!.password!;
-    nameController.text = "Nombre Usuario";
-    lastNameController.text = "Apellido Usuario";
-    mailController.text = "Correo Usuario";
-    passwordController.text = "Contraseña Usuario";
+    nameController.text = CustomUser.usuarioActual!.name;
+    lastNameController.text = CustomUser.usuarioActual!.lastName;
+    mailController.text = CustomUser.usuarioActual!.mail;
+    passwordController.text = CustomUser.usuarioActual!.password!;
   }
 
   @override
