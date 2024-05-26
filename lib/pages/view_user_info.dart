@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:srac_app/model/model_custom_user.dart';
+import 'package:srac_app/pages/view_crops.dart';
 import 'package:srac_app/pages/view_home.dart';
 // import 'package:srac_app/model/custom_user.dart';
 
 import 'package:srac_app/pages/view_login.dart';
+import 'package:srac_app/services/database_services.dart';
 
 class UserInfo extends StatefulWidget {
   const UserInfo({super.key});
@@ -278,7 +280,38 @@ class _UserInfoState extends State<UserInfo> {
                   width: 60,
                   child: Center(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        if (DatabaseServices.logout()) {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      const Login(),
+                              transitionsBuilder: (context, animation,
+                                  secondaryAnimation, child) {
+                                var begin = const Offset(0.0, -1.0);
+                                var end = Offset.zero;
+                                var curve = Curves.easeInOut;
+
+                                var tween = Tween(begin: begin, end: end)
+                                    .chain(CurveTween(curve: curve));
+                                var curvedAnimation = CurvedAnimation(
+                                  parent: animation,
+                                  curve: curve,
+                                );
+
+                                return SlideTransition(
+                                  position: tween.animate(curvedAnimation),
+                                  child: child,
+                                );
+                              },
+                              transitionDuration: const Duration(
+                                  milliseconds: 700), // Ajusta la duración aquí
+                            ),
+                          );
+                        }
+                      },
                       child: const Icon(
                         Icons.logout,
                         color: Colors.white,
@@ -320,8 +353,33 @@ class _UserInfoState extends State<UserInfo> {
           children: [
             GestureDetector(
               onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const Tasks()));
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (context, animation, secondaryAnimation) =>
+                        const Crops(),
+                    transitionsBuilder:
+                        (context, animation, secondaryAnimation, child) {
+                      var begin = const Offset(-1.0, 0.0);
+                      var end = Offset.zero;
+                      var curve = Curves.easeInOut;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: curve));
+                      var curvedAnimation = CurvedAnimation(
+                        parent: animation,
+                        curve: curve,
+                      );
+
+                      return SlideTransition(
+                        position: tween.animate(curvedAnimation),
+                        child: child,
+                      );
+                    },
+                    transitionDuration: const Duration(
+                        milliseconds: 700), // Ajusta la duración aquí
+                  ),
+                );
               },
               child: Image.asset(
                 'assets/flowerpot_icon.png',

@@ -20,6 +20,15 @@ class DatabaseServices {
     }
   }
 
+  static bool logout() {
+    try {
+      CustomUser.usuarioActual = null;
+      return true;
+    } catch (e) {
+      throw Exception("Hubo un error en logout $e");
+    }
+  }
+
   static Future<bool> registerUser({
     required BuildContext context,
     required String name,
@@ -93,7 +102,7 @@ class DatabaseServices {
     }
   }
 
-   static int calculateAge(DateTime fechaNacimiento) {
+  static int calculateAge(DateTime fechaNacimiento) {
     try {
       final now = DateTime.now();
       final edad = now.year - fechaNacimiento.year;

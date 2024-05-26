@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:srac_app/pages/view_home.dart';
-// import 'package:srac_app/model/custom_user.dart';
 import 'package:srac_app/pages/view_user_info.dart';
 import 'package:srac_app/pages/view_crops.dart';
-import 'package:flutter/material.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
 
@@ -16,7 +14,7 @@ class CropDetail extends StatefulWidget {
   State<CropDetail> createState() => _CropDetailState();
 }
 
-class _CropDetailState extends State<CropDetail>{
+class _CropDetailState extends State<CropDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,32 +53,127 @@ class _CropDetailState extends State<CropDetail>{
                   ),
                 ),
                 // ----------- DETALLES DEL CULTIVO ------------
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
+                Container(
+                  width: 400,
+                  height: 300,
+                  margin: const EdgeInsets.only(top: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        '${widget.crop.humedad}% Hum P',
-                        style: TextStyle(fontSize: 18),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          bottomLeft: Radius.circular(20),
+                        ),
+                        child: Container(
+                            child: Image.asset(
+                          'assets/${widget.crop.type}.png',
+                          width: 150,
+                          height: 300,
+                          fit: BoxFit.cover,
+                        )),
                       ),
-                      Text(
-                        '${widget.crop.agua}L de agua',
-                        style: TextStyle(fontSize: 18),
+                      ClipRRect(
+                        borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(20),
+                          bottomRight: Radius.circular(20),
+                        ),
+                        child: Container(
+                          width: 200,
+                          padding: const EdgeInsets.all(5.0),
+                          color: const Color(0xFFF7FFEC),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                child: const Center(
+                                  child: Text('Datos del cultivo',
+                                      style: const TextStyle(
+                                          fontSize: 25,
+                                          color:
+                                              Color.fromARGB(255, 50, 71, 15),
+                                          fontWeight: FontWeight.bold),
+                                      textAlign: TextAlign.center),
+                                ),
+                              ),
+                              Container(
+                                width: 180,
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                margin: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF32470F),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${widget.crop.humedad}% Hum',
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                margin: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF32470F),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${widget.crop.agua}L de agua',
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                padding: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10, bottom: 10),
+                                margin: const EdgeInsets.only(
+                                    left: 20, right: 20, top: 10),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF32470F),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    '${widget.crop.temperatura}°C',
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
+                        ),
                       ),
-                      Text(
-                        '${widget.crop.temperatura}L de temperatura',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      SizedBox(height: 20),
-                      CropChart(),
-                      const SizedBox(height: 150),
                     ],
                   ),
                 ),
+                const CropChart(),
+                const SizedBox(height: 150),
               ],
             ),
           ),
-
           Positioned(
             top: 25,
             left: 25,
@@ -115,7 +208,6 @@ class _CropDetailState extends State<CropDetail>{
               ),
             ),
           ),
-
           // ----------- BUTTON Home ------------
           navbar(context),
         ],
@@ -146,8 +238,7 @@ class _CropDetailState extends State<CropDetail>{
           children: [
             GestureDetector(
               onTap: () {
-                // Navigator.push(context,
-                //     MaterialPageRoute(builder: (context) => const Tasks()));
+                // Navegación a la página de tareas
               },
               child: Image.asset(
                 'assets/flowerpot_icon.png',
@@ -238,6 +329,8 @@ class _CropDetailState extends State<CropDetail>{
 }
 
 class CropChart extends StatelessWidget {
+  const CropChart({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -255,21 +348,26 @@ class CropChart extends StatelessWidget {
         ChartContainer(
           title: "Riego de agua a través del tiempo",
           data: [
-            TimeSeriesData(DateTime(2024, 1, 1), 30),
-            TimeSeriesData(DateTime(2024, 2, 1), 40),
-            TimeSeriesData(DateTime(2024, 3, 1), 35),
-            TimeSeriesData(DateTime(2024, 4, 1), 50),
-            TimeSeriesData(DateTime(2024, 5, 1), 45),
+            TimeSeriesData(DateTime(2024, 1, 1), 0.5),
+            TimeSeriesData(DateTime(2024, 2, 1), 0.1),
+            TimeSeriesData(DateTime(2024, 3, 1), 0.071),
+            TimeSeriesData(DateTime(2024, 4, 1), 0.1),
+            TimeSeriesData(DateTime(2024, 5, 1), 0.3),
           ],
         ),
         ChartContainer(
           title: "Temperatura del suelo a través del tiempo",
           data: [
             TimeSeriesData(DateTime(2024, 1, 1), 15),
-            TimeSeriesData(DateTime(2024, 2, 1), 18),
-            TimeSeriesData(DateTime(2024, 3, 1), 20),
+            TimeSeriesData(DateTime(2024, 2, 1), 10),
+            TimeSeriesData(DateTime(2024, 3, 1), 30),
             TimeSeriesData(DateTime(2024, 4, 1), 22),
-            TimeSeriesData(DateTime(2024, 5, 1), 25),
+            TimeSeriesData(DateTime(2024, 5, 1), 28),
+            TimeSeriesData(DateTime(2024, 6, 1), 11),
+            TimeSeriesData(DateTime(2024, 7, 1), 38),
+            TimeSeriesData(DateTime(2024, 8, 1), 42),
+            TimeSeriesData(DateTime(2024, 9, 1), 30),
+            TimeSeriesData(DateTime(2024, 10, 1), 11),
           ],
         ),
       ],
@@ -295,26 +393,74 @@ class ChartContainer extends StatelessWidget {
       )
     ];
 
-    return Column(
-      children: [
-        Text(title,
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(
-          height: 200.0,
-          child: charts.TimeSeriesChart(
-            series,
-            animate: true,
-            dateTimeFactory: const charts.LocalDateTimeFactory(),
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(left: 25, right: 25, top: 20),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF7FFEC),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            spreadRadius: 2,
+            blurRadius: 5,
           ),
-        ),
-      ],
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF32470F),
+            ),
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 200.0,
+            child: charts.TimeSeriesChart(
+              series,
+              animate: true,
+              dateTimeFactory: const charts.LocalDateTimeFactory(),
+              behaviors: [
+                charts.ChartTitle('Fecha',
+                    behaviorPosition: charts.BehaviorPosition.bottom,
+                    titleOutsideJustification:
+                        charts.OutsideJustification.middleDrawArea,
+                    innerPadding: 18),
+                charts.ChartTitle('Valor (°C / % / L)',
+                    behaviorPosition: charts.BehaviorPosition.start,
+                    titleOutsideJustification:
+                        charts.OutsideJustification.middleDrawArea,
+                    innerPadding: 18),
+              ],
+              primaryMeasureAxis: charts.NumericAxisSpec(
+                renderSpec: charts.GridlineRendererSpec(
+                  lineStyle: charts.LineStyleSpec(
+                    color: charts.MaterialPalette.gray.shadeDefault,
+                  ),
+                ),
+              ),
+              domainAxis: charts.DateTimeAxisSpec(
+                renderSpec: charts.GridlineRendererSpec(
+                  lineStyle: charts.LineStyleSpec(
+                    color: charts.MaterialPalette.gray.shadeDefault,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
 
 class TimeSeriesData {
   final DateTime time;
-  final int value;
+  final double value;
 
   TimeSeriesData(this.time, this.value);
 }
