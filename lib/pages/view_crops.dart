@@ -15,12 +15,12 @@ class Crops extends StatefulWidget {
 
 class Crop {
   final String name;
-  final String type;
+  final String tipo;
   final int humedad;
   final int agua;
   final int temperatura;
 
-  Crop(this.name, this.type, this.humedad, this.agua, this.temperatura);
+  Crop(this.name, this.tipo, this.humedad, this.agua, this.temperatura);
 }
 
 class StaticCrop {
@@ -162,7 +162,7 @@ class _CropsState extends State<Crops> {
                                         bottomRight: Radius.circular(20),
                                       ),
                                       child: Image.asset(
-                                        "assets/${cropsList[index].type}.png",
+                                        "assets/${cropsList[index].tipo}.png",
                                         width: 50,
                                         height: 50,
                                         fit: BoxFit.cover,
