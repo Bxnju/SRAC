@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:srac_app/model/model_custom_user.dart';
 import 'package:srac_app/pages/view_add_crop.dart';
 import 'package:srac_app/pages/view_crop_detail.dart';
 import 'package:srac_app/pages/view_home.dart';
-// import 'package:srac_app/model/custom_user.dart';
 import 'package:srac_app/pages/view_user_info.dart';
 
 class Crops extends StatefulWidget {
@@ -16,9 +16,9 @@ class Crops extends StatefulWidget {
 class Crop {
   final String nombre;
   final String tipo;
-  final int humedad;
-  final int agua;
-  final int temperatura;
+  final double humedad;
+  final double agua;
+  final double temperatura;
 
   Crop(this.nombre, this.tipo, this.humedad, this.agua, this.temperatura);
 }
@@ -28,12 +28,12 @@ class StaticCrop {
   static CollectionReference cropsCollection = firestore.collection("Cultivos");
   final String nombre;
   final String nombreCientifico;
-  final int tempMaxDiurna;
-  final int tempMinDiurna;
-  final int tempMaxNocturna;
-  final int tempMinNocturna;
-  final int humMaxPorc;
-  final int humMinPorc;
+  final double tempMaxDiurna;
+  final double tempMinDiurna;
+  final double tempMaxNocturna;
+  final double tempMinNocturna;
+  final double humMaxPorc;
+  final double humMinPorc;
 
   StaticCrop(
       this.nombre,
@@ -47,16 +47,17 @@ class StaticCrop {
 }
 
 class _CropsState extends State<Crops> {
-  final List<Crop> cropsList = [
-    Crop("Cultivo N°1 - Lechugas", "lechuga", 75, 3, 22),
-    Crop("Cultivo N°2 - Tomates", "tomate", 50, 2, 22),
-    Crop("Cultivo N°3 - Cebolla", "cebolla", 30, 4, 15),
-    Crop("Cultivo N°4 - Cilantro", "cilantro", 64, 4, 19),
-    Crop("Cultivo N°5 - Perejil", "perejil", 70, 4, 14),
-  ];
-
+  final List<Crop> cropsList = [];
   final List<StaticCrop> staticCropsList = [];
   bool isLoading = true; // Nueva bandera de carga
+
+  @override
+  void initState() {
+    super.initState();
+    _getCropsFromFirestore();
+    _getCropsToUser(CustomUser.usuarioActual!
+        .mail); // Reemplaza con el correo electrónico del usuario actual
+  }
 
   Future<void> _getCropsFromFirestore() async {
     try {
@@ -78,20 +79,53 @@ class _CropsState extends State<Crops> {
 
       setState(() {
         staticCropsList.addAll(crops);
-        isLoading = false; // Datos cargados
       });
     } catch (e) {
       print('Error al obtener cultivos: $e');
+    }
+  }
+
+  Future<void> _getCropsToUser(String userEmail) async {
+    try {
+      DocumentReference userDoc =
+          FirebaseFirestore.instance.collection("Usuarios").doc(userEmail);
+      DocumentSnapshot docSnapshot = await userDoc.get();
+
+      if (docSnapshot.exists) {
+        Map<String, dynamic> userData =
+            docSnapshot.data() as Map<String, dynamic>;
+        Map<String, dynamic> macetas = userData["Macetas"] ?? {};
+
+        macetas.forEach((macetaKey, macetaValue) {
+          // Accede a los cultivos como un mapa anidado dentro de Macetas
+          Map<String, dynamic> cultivos = macetaValue["Cultivos"] ?? {};
+
+          cultivos.forEach((cultivoKey, cultivoValue) {
+            // Aquí creamos un nuevo objeto Crop y lo agregamos a la lista cropsList
+            Crop newCrop = Crop(
+              "${cultivoValue['nombre']} - $macetaKey", // Concatenamos el nombre del cultivo con el nombre de la maceta
+              cultivoValue['tipo'], // El tipo será el nombre del cultivo
+              cultivoValue['hume'], // Humedad
+              cultivoValue['agua'], // Agua
+              cultivoValue['temp'], // Temperatura
+            );
+            cropsList.add(newCrop);
+          });
+        });
+
+        // Cambiamos el estado para indicar que los datos se cargaron
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        print("No se encontró el documento del usuario.");
+      }
+    } catch (e) {
+      print('Error al obtener los cultivos: $e');
       setState(() {
         isLoading = false; // Evita el bucle infinito en caso de error
       });
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCropsFromFirestore();
   }
 
   @override
@@ -142,10 +176,12 @@ class _CropsState extends State<Crops> {
                           itemCount: cropsList.length,
                           itemBuilder: (context, index) {
                             StaticCrop staticCropAux =
-                                staticCropsList.firstWhere((element) =>
-                                    element.nombre == cropsList[index].tipo);
+                                staticCropsList.firstWhere(
+                              (element) =>
+                                  element.nombre == cropsList[index].tipo,
+                            );
                             print(
-                                '${staticCropAux.nombre} - ${cropsList[index].tipo} - ${staticCropAux.tempMaxDiurna} - ${staticCropAux.tempMinDiurna} - ${cropsList[index].temperatura}');
+                                '${staticCropAux?.nombre} - ${cropsList[index].tipo} - ${staticCropAux?.tempMaxDiurna} - ${staticCropAux?.tempMinDiurna} - ${cropsList[index].temperatura}');
                             return Center(
                               child: GestureDetector(
                                 onTap: () {
@@ -168,14 +204,18 @@ class _CropsState extends State<Crops> {
                                         height: 40,
                                         width: 300,
                                         decoration: BoxDecoration(
-                                          color: staticCropAux.tempMaxDiurna >
-                                                  cropsList[index].temperatura
-                                              ? staticCropAux.tempMinDiurna <
+                                          color: staticCropAux != null
+                                              ? (staticCropAux.tempMaxDiurna >
                                                       cropsList[index]
                                                           .temperatura
-                                                  ? const Color(0xFF32470F)
-                                                  : const Color(0xFF10416B)
-                                              : const Color(0xFF590F0F),
+                                                  ? (staticCropAux
+                                                              .tempMinDiurna <
+                                                          cropsList[index]
+                                                              .temperatura
+                                                      ? const Color(0xFF32470F)
+                                                      : const Color(0xFF10416B))
+                                                  : const Color(0xFF590F0F))
+                                              : const Color(0xFF32470F),
                                           borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20)),
