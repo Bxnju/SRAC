@@ -20,6 +20,7 @@ class _LoginState extends State<Login> {
 
   final TextEditingController cMail = TextEditingController();
   final TextEditingController cPassword = TextEditingController();
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -116,10 +117,24 @@ class _LoginState extends State<Login> {
                         margin:
                             const EdgeInsets.only(top: 10, left: 30, right: 30),
                         child: TextFormField(
+                          obscureText:
+                              !_isPasswordVisible, // Hace que el texto sea visible o no
                           controller: cPassword,
-                          obscureText: true,
                           decoration: InputDecoration(
                             filled: true,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isPasswordVisible =
+                                      !_isPasswordVisible; // Cambia el estado de visibilidad
+                                });
+                              },
+                            ),
                             fillColor: const Color.fromARGB(255, 255, 255, 255),
                             hintText: 'Contraseña',
                             hintStyle: const TextStyle(fontSize: 20),
@@ -198,6 +213,19 @@ class _LoginState extends State<Login> {
                                   mail: cMail.text, password: cPassword.text);
 
                               if (success) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: const Color(0xFF32470F),
+                                  content: Text(
+                                    'Bienvenido a SRAC ${CustomUser.usuarioActual!.name} ${CustomUser.usuarioActual!.lastName}!',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: const Duration(seconds: 3),
+                                ));
                                 Navigator.push(
                                   context,
                                   PageRouteBuilder(
@@ -231,7 +259,21 @@ class _LoginState extends State<Login> {
 
                                 cMail.clear();
                                 cPassword.clear();
-                              } else {}
+                              } else {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: Color(0xFF830000),
+                                  content: Text(
+                                    'Correo o contraseña incorrectos. Por favor, inténtelo de nuevo.',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: Duration(seconds: 3),
+                                ));
+                              }
                             }
                           },
                           child: Container(

@@ -56,7 +56,7 @@ class _CropsState extends State<Crops> {
     super.initState();
     _getCropsFromFirestore();
     _getCropsToUser(CustomUser.usuarioActual!
-        .mail); // Reemplaza con el correo electrónico del usuario actual
+        .mail); // Se obtienen los cultivos del usuario actual
   }
 
   Future<void> _getCropsFromFirestore() async {
@@ -81,7 +81,7 @@ class _CropsState extends State<Crops> {
         staticCropsList.addAll(crops);
       });
     } catch (e) {
-      print('Error al obtener cultivos: $e');
+      throw Exception('Error al obtener los cultivos estaticos: $e');
     }
   }
 
@@ -104,7 +104,7 @@ class _CropsState extends State<Crops> {
             // Aquí creamos un nuevo objeto Crop y lo agregamos a la lista cropsList
             Crop newCrop = Crop(
               "${cultivoValue['nombre']} - $macetaKey", // Concatenamos el nombre del cultivo con el nombre de la maceta
-              cultivoValue['tipo'], // El tipo será el nombre del cultivo
+              cultivoValue['tipo'], // Tipo
               cultivoValue['hume'], // Humedad
               cultivoValue['agua'], // Agua
               cultivoValue['temp'], // Temperatura
@@ -118,13 +118,10 @@ class _CropsState extends State<Crops> {
           isLoading = false;
         });
       } else {
-        print("No se encontró el documento del usuario.");
+      throw Exception('Error al obtener los cultivos: No existe el usuario en la base de datos');
       }
     } catch (e) {
-      print('Error al obtener los cultivos: $e');
-      setState(() {
-        isLoading = false; // Evita el bucle infinito en caso de error
-      });
+      throw Exception('Error al obtener los cultivos: $e');
     }
   }
 
@@ -137,7 +134,11 @@ class _CropsState extends State<Crops> {
           Container(
             color: const Color(0xFFBFD4A4),
             child: isLoading
-                ? Center(child: const CircularProgressIndicator())
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    strokeWidth: 7,
+                    color: Color(0xFF32470F),
+                  ))
                 : ListView(
                     children: [
                       const SizedBox(height: 20),
@@ -181,7 +182,7 @@ class _CropsState extends State<Crops> {
                                   element.nombre == cropsList[index].tipo,
                             );
                             print(
-                                '${staticCropAux?.nombre} - ${cropsList[index].tipo} - ${staticCropAux?.tempMaxDiurna} - ${staticCropAux?.tempMinDiurna} - ${cropsList[index].temperatura}');
+                                '${staticCropAux.nombre} - ${cropsList[index].tipo} - ${staticCropAux.tempMaxDiurna} - ${staticCropAux.tempMinDiurna} - ${cropsList[index].temperatura}');
                             return Center(
                               child: GestureDetector(
                                 onTap: () {
@@ -204,18 +205,14 @@ class _CropsState extends State<Crops> {
                                         height: 40,
                                         width: 300,
                                         decoration: BoxDecoration(
-                                          color: staticCropAux != null
-                                              ? (staticCropAux.tempMaxDiurna >
+                                          color: (staticCropAux.tempMaxDiurna >
+                                                  cropsList[index].temperatura
+                                              ? (staticCropAux.tempMinDiurna <
                                                       cropsList[index]
                                                           .temperatura
-                                                  ? (staticCropAux
-                                                              .tempMinDiurna <
-                                                          cropsList[index]
-                                                              .temperatura
-                                                      ? const Color(0xFF32470F)
-                                                      : const Color(0xFF10416B))
-                                                  : const Color(0xFF590F0F))
-                                              : const Color(0xFF32470F),
+                                                  ? const Color(0xFF32470F)
+                                                  : const Color(0xFF10416B))
+                                              : const Color(0xFF590F0F)),
                                           borderRadius: const BorderRadius.only(
                                               topLeft: Radius.circular(20),
                                               topRight: Radius.circular(20)),

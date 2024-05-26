@@ -95,7 +95,7 @@ class _CropDetailState extends State<CropDetail> {
                                     left: 20, right: 20, top: 10, bottom: 10),
                                 child: const Center(
                                   child: Text('Datos del cultivo',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 25,
                                           color:
                                               Color.fromARGB(255, 50, 71, 15),

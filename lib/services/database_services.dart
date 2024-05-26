@@ -62,7 +62,7 @@ class DatabaseServices {
           "apellido": lastName,
           "fecha_nacimiento": convDateToString(birthDate),
           "genero": convGenderToString(genere),
-          "Maceta": []
+          "Macetas": {"N1": {}, "N2": {}, "N3": {}}
         });
 
         return true;
@@ -188,6 +188,4 @@ class DatabaseServices {
       throw Exception("Hubo un error en login $e");
     }
   }
-
-  
 }

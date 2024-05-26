@@ -20,6 +20,12 @@ class _UserInfoState extends State<UserInfo> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController mailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final RegExp vPassword =
+      RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[\W_]).{8,}$');
+  bool _isNameIconVisible = false;
+  bool _isLastNameIconVisible = false;
+  bool _isMailIconVisible = false;
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -41,22 +47,72 @@ class _UserInfoState extends State<UserInfo> {
     super.dispose();
   }
 
-  void updateUserProfile(String field, String value) {
-    // Por ejemplo, usando Firebase:
-    FirebaseFirestore.instance
-        .collection('Usuarios')
-        .doc(CustomUser.usuarioActual!.mail)
-        .update({field: value});
+  void updateUserProfile(String field, String value) async {
+    String correoAntiguo = CustomUser.usuarioActual!.mail;
+
     if (field == 'nombre') {
       CustomUser.usuarioActual!.name = value;
-    } else if (field == 'apellidos') {
+
+      await FirebaseFirestore.instance
+          .collection('Usuarios')
+          .doc(CustomUser.usuarioActual!.mail)
+          .update({field: value});
+    } else if (field == 'apellido') {
       CustomUser.usuarioActual!.lastName = value;
+
+      await FirebaseFirestore.instance
+          .collection('Usuarios')
+          .doc(CustomUser.usuarioActual!.mail)
+          .update({field: value});
     } else if (field == 'correo') {
       CustomUser.usuarioActual!.mail = value;
+
+      // Actualizar correo requiere crear un nuevo documento y eliminar el antiguo
+      DocumentSnapshot oldUserDoc = await FirebaseFirestore.instance
+          .collection('Usuarios')
+          .doc(correoAntiguo)
+          .get();
+
+      if (oldUserDoc.exists) {
+        // Crear nuevo documento con los mismos datos y nuevo correo
+        await FirebaseFirestore.instance
+            .collection('Usuarios')
+            .doc(value)
+            .set(oldUserDoc.data() as Map<String, dynamic>);
+
+        // Actualizar el campo 'mail' en el nuevo documento
+        await FirebaseFirestore.instance
+            .collection('Usuarios')
+            .doc(value)
+            .update({'correo': value});
+
+        // Eliminar el documento antiguo
+        await FirebaseFirestore.instance
+            .collection('Usuarios')
+            .doc(correoAntiguo)
+            .delete();
+      }
     } else if (field == 'contraseña') {
       CustomUser.usuarioActual!.password = value;
+
+      await FirebaseFirestore.instance
+          .collection('Usuarios')
+          .doc(CustomUser.usuarioActual!.mail)
+          .update({field: value});
     }
-    print('Updated $field to $value');
+
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      backgroundColor: const Color(0xFF32470F),
+      content: Text(
+        'Se ha actualizado el campo $field',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      duration: const Duration(seconds: 3),
+    ));
   }
 
   @override
@@ -115,6 +171,8 @@ class _UserInfoState extends State<UserInfo> {
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
                       children: [
+                        //----- NAME -----
+
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: TextFormField(
@@ -129,21 +187,39 @@ class _UserInfoState extends State<UserInfo> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide: BorderSide.none),
-                              suffixIcon: const Icon(
-                                Icons.edit,
-                                color: Color(0xFF32470F),
-                                size: 30,
-                              ),
+                              suffixIcon: _isNameIconVisible
+                                  ? IconButton(
+                                      onPressed: () {
+                                        updateUserProfile(
+                                            'nombre', nameController.text);
+                                        setState(() {
+                                          _isNameIconVisible = false;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Color(0xFF32470F),
+                                        size: 30,
+                                      ))
+                                  : null,
                             ),
                             style: const TextStyle(fontSize: 23),
                             onFieldSubmitted: (value) {
                               updateUserProfile('nombre', value);
+                              setState(() {
+                                _isNameIconVisible = false;
+                              });
                             },
                             onChanged: (value) {
-                              updateUserProfile('nombre', value);
+                              setState(() {
+                                _isNameIconVisible = true;
+                              });
                             },
                           ),
                         ),
+
+                        //----- LAST NAME -----
+
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: TextFormField(
@@ -158,21 +234,39 @@ class _UserInfoState extends State<UserInfo> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide: BorderSide.none),
-                              suffixIcon: const Icon(
-                                Icons.edit,
-                                color: Color(0xFF32470F),
-                                size: 30,
-                              ),
+                              suffixIcon: _isLastNameIconVisible
+                                  ? IconButton(
+                                      onPressed: () {
+                                        updateUserProfile('apellido',
+                                            lastNameController.text);
+                                        setState(() {
+                                          _isLastNameIconVisible = false;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Color(0xFF32470F),
+                                        size: 30,
+                                      ))
+                                  : null,
                             ),
                             style: const TextStyle(fontSize: 23),
                             onFieldSubmitted: (value) {
-                              updateUserProfile('apellidos', value);
+                              updateUserProfile('apellido', value);
+                              setState(() {
+                                _isLastNameIconVisible = false;
+                              });
                             },
                             onChanged: (value) {
-                              updateUserProfile('apellidos', value);
+                              setState(() {
+                                _isLastNameIconVisible = true;
+                              });
                             },
                           ),
                         ),
+
+                        //----- EMAIL -----
+
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: TextFormField(
@@ -187,28 +281,59 @@ class _UserInfoState extends State<UserInfo> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide: BorderSide.none),
-                              suffixIcon: const Icon(
-                                Icons.edit,
-                                color: Color(0xFF32470F),
-                                size: 30,
-                              ),
+                              suffixIcon: _isMailIconVisible
+                                  ? IconButton(
+                                      onPressed: () {
+                                        updateUserProfile(
+                                            'correo', mailController.text);
+                                        setState(() {
+                                          _isMailIconVisible = false;
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.check,
+                                        color: Color(0xFF32470F),
+                                        size: 30,
+                                      ))
+                                  : null,
                             ),
                             style: const TextStyle(fontSize: 23),
-                            keyboardType: TextInputType.emailAddress,
                             onFieldSubmitted: (value) {
                               updateUserProfile('correo', value);
+                              setState(() {
+                                _isMailIconVisible = false;
+                              });
                             },
                             onChanged: (value) {
-                              updateUserProfile('correo', value);
+                              setState(() {
+                                _isMailIconVisible = true;
+                              });
                             },
                           ),
                         ),
+
+                        //----- PASSWORD -----
+
                         Container(
                           margin: const EdgeInsets.only(top: 20),
                           child: TextFormField(
                             controller: passwordController,
-                            obscureText: true,
+                            obscureText:
+                                !_isPasswordVisible, // Hace que el texto sea visible o no
                             decoration: InputDecoration(
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    _isPasswordVisible =
+                                        !_isPasswordVisible; // Cambia el estado de visibilidad
+                                  });
+                                },
+                              ),
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
                               labelText: 'Contraseña',
@@ -218,11 +343,6 @@ class _UserInfoState extends State<UserInfo> {
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(25),
                                   borderSide: BorderSide.none),
-                              suffixIcon: const Icon(
-                                Icons.edit,
-                                color: Color(0xFF32470F),
-                                size: 30,
-                              ),
                             ),
                             style: const TextStyle(fontSize: 23),
                             keyboardType: TextInputType.phone,
@@ -230,7 +350,50 @@ class _UserInfoState extends State<UserInfo> {
                               updateUserProfile('contraseña', value);
                             },
                             onChanged: (value) {
-                              updateUserProfile('contraseña', value);
+                              if (value.isEmpty) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: Color(0xFF830000),
+                                  content: Text(
+                                    'La contraseña no puede estar vacía.',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                ));
+                              } else if (!vPassword.hasMatch(value)) {
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: Color(0xFF830000),
+                                  content: Text(
+                                    'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un caracter especial.',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                ));
+                              } else {
+                                updateUserProfile('contraseña', value);
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
+                                  backgroundColor: Color(0xFF32470F),
+                                  content: Text(
+                                    'Se ha actualizado la contraseña',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  duration: Duration(seconds: 1),
+                                ));
+                              }
                             },
                           ),
                         ),
@@ -353,7 +516,7 @@ class _UserInfoState extends State<UserInfo> {
       left: 0,
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 205, 233, 201),
+          color: const Color.fromARGB(255, 205, 233, 201),
           boxShadow: [
             BoxShadow(
                 color: Colors.black.withOpacity(0.2),

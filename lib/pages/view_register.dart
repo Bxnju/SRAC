@@ -21,6 +21,7 @@ class _RegisterState extends State<Register> {
   TextEditingController cLastname = TextEditingController();
   TextEditingController cMail = TextEditingController();
   TextEditingController cPassword = TextEditingController();
+  bool _isPasswordVisible = false;
 
   eGenere cGender = eGenere.none;
 
@@ -296,9 +297,24 @@ class _RegisterState extends State<Register> {
                           Container(
                             margin: const EdgeInsets.only(top: 10),
                             child: TextFormField(
+                              obscureText:
+                                  !_isPasswordVisible, // Hace que el texto sea visible o no
                               //Password Controller
                               controller: cPassword,
                               decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible =
+                                          !_isPasswordVisible; // Cambia el estado de visibilidad
+                                    });
+                                  },
+                                ),
                                 filled: true,
                                 fillColor: Colors.white,
                                 hintText: 'Contraseña',
@@ -337,14 +353,64 @@ class _RegisterState extends State<Register> {
                                           genere: cGender,
                                           birthDate: cBirthdate!);
                                   if (success) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      backgroundColor: Color(0xFF32470F),
+                                      content: Text(
+                                        'Usuario registrado con éxito',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 3),
+                                    ));
                                     Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Home()));
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation,
+                                                secondaryAnimation) =>
+                                            const Home(),
+                                        transitionsBuilder: (context, animation,
+                                            secondaryAnimation, child) {
+                                          var begin = const Offset(0.0, 1.0);
+                                          var end = Offset.zero;
+                                          var curve = Curves.easeInOut;
+
+                                          var tween = Tween(
+                                                  begin: begin, end: end)
+                                              .chain(CurveTween(curve: curve));
+                                          var curvedAnimation = CurvedAnimation(
+                                            parent: animation,
+                                            curve: curve,
+                                          );
+
+                                          return SlideTransition(
+                                            position:
+                                                tween.animate(curvedAnimation),
+                                            child: child,
+                                          );
+                                        },
+                                        transitionDuration: const Duration(
+                                            milliseconds:
+                                                700), // Ajusta la duración aquí
+                                      ),
+                                    );
                                   } else {
-                                    print(
-                                        "Ya el usuario existe en la base de datos");
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                      backgroundColor: Color(0xFF830000),
+                                      content: Text(
+                                        'El usuario ya existe. Por favor, inicie sesión.',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      duration: Duration(seconds: 3),
+                                    ));
                                   }
                                 }
                               },
@@ -403,10 +469,10 @@ class _RegisterState extends State<Register> {
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    Login(),
+                                    const Login(),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
-                              var begin = Offset(-1.0, 0.0);
+                              var begin = const Offset(-1.0, 0.0);
                               var end = Offset.zero;
                               var curve = Curves.easeInOut;
 
@@ -422,7 +488,7 @@ class _RegisterState extends State<Register> {
                                 child: child,
                               );
                             },
-                            transitionDuration: Duration(
+                            transitionDuration: const Duration(
                                 milliseconds: 700), // Ajusta la duración aquí
                           ),
                         );
