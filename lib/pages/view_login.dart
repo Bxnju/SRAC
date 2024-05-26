@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:srac_app/pages/view_register.dart';
+import 'package:srac_app/services/database_services.dart';
 
 import 'view_home.dart';
 
@@ -183,37 +184,44 @@ class _LoginState extends State<Login> {
                       Center(
                         child: GestureDetector(
                           onTap: () async {
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                pageBuilder:
-                                    (context, animation, secondaryAnimation) =>
-                                        const Home(),
-                                transitionsBuilder: (context, animation,
-                                    secondaryAnimation, child) {
-                                  var begin = const Offset(0.0, 1.0);
-                                  var end = Offset.zero;
-                                  var curve = Curves.easeInOut;
-
-                                  var tween = Tween(begin: begin, end: end)
-                                      .chain(CurveTween(curve: curve));
-                                  var curvedAnimation = CurvedAnimation(
-                                    parent: animation,
-                                    curve: curve,
-                                  );
-
-                                  return SlideTransition(
-                                    position: tween.animate(curvedAnimation),
-                                    child: child,
-                                  );
-                                },
-                                transitionDuration: const Duration(
-                                    milliseconds:
-                                        700), // Ajusta la duración aquí
-                              ),
+                            print('Intentando obtener el usuario con correo: $cMail');
+                            bool loginSuccess = await DatabaseServices.login(
+                              mail: cMail.text,
+                              password: cPassword.text,
                             );
-                            cMail.clear();
-                            cPassword.clear();
+                            if (loginSuccess) {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation,
+                                          secondaryAnimation) =>
+                                      const Home(),
+                                  transitionsBuilder: (context, animation,
+                                      secondaryAnimation, child) {
+                                    var begin = const Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.easeInOut;
+
+                                    var tween = Tween(begin: begin, end: end)
+                                        .chain(CurveTween(curve: curve));
+                                    var curvedAnimation = CurvedAnimation(
+                                      parent: animation,
+                                      curve: curve,
+                                    );
+
+                                    return SlideTransition(
+                                      position: tween.animate(curvedAnimation),
+                                      child: child,
+                                    );
+                                  },
+                                  transitionDuration: const Duration(
+                                      milliseconds:
+                                          700), // Ajusta la duración aquí
+                                ),
+                              );
+                              cMail.clear();
+                              cPassword.clear();
+                            } else {}
                           },
                           child: Container(
                             margin: const EdgeInsets.only(top: 20),
@@ -222,9 +230,10 @@ class _LoginState extends State<Login> {
                               color: const Color(0xFF32470F),
                               boxShadow: [
                                 BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 3,
-                                    offset: const Offset(0, 3))
+                                  color: Colors.black.withOpacity(0.2),
+                                  spreadRadius: 3,
+                                  offset: const Offset(0, 3),
+                                ),
                               ],
                             ),
                             height: 70,

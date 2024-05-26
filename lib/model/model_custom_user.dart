@@ -13,7 +13,6 @@ class CustomUser {
   final String mail;
   String? password;
   final eGenere genere; //enum con los generos
-  final int age;
   final DateTime? birthDate;
   final List<Flowerpot> flowerpotList;
 
@@ -24,7 +23,6 @@ class CustomUser {
       required this.lastName,
       required this.mail,
       required this.password,
-      required this.age,
       this.genere = eGenere.none, // Valor por defecto
       required this.birthDate,
       this.flowerpotList = const []});
