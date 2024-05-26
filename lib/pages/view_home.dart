@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:srac_app/pages/view_crops.dart';
 // import 'package:srac_app/model/custom_user.dart';
-
-import 'package:srac_app/pages/view_login.dart';
 import 'package:srac_app/pages/view_user_info.dart';
 
 class Home extends StatelessWidget {

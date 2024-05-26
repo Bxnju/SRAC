@@ -42,7 +42,7 @@ class _CropDetailState extends State<CropDetail> {
                   ),
                   child: Center(
                     child: Text(
-                      widget.crop.name,
+                      widget.crop.nombre,
                       maxLines: 3,
                       style: const TextStyle(
                           fontFamily: 'Roboto',
