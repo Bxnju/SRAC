@@ -71,7 +71,7 @@ class _CropDetailState extends State<CropDetail> {
                         ),
                         child: Container(
                             child: Image.asset(
-                          'assets/${widget.crop.type}.png',
+                          'assets/${widget.crop.tipo}.png',
                           width: 150,
                           height: 300,
                           fit: BoxFit.cover,
