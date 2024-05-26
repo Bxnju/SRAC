@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:srac_app/model/model_custom_user.dart';
 import 'package:srac_app/pages/view_crops.dart';
 import 'package:srac_app/pages/view_home.dart';
@@ -105,7 +106,7 @@ class _UserInfoState extends State<UserInfo> {
       backgroundColor: const Color(0xFF32470F),
       content: Text(
         'Se ha actualizado el campo $field',
-        style: const TextStyle(
+        style: TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
@@ -125,25 +126,25 @@ class _UserInfoState extends State<UserInfo> {
               color: Color(0xFFBFD4A4),
               child: ListView(
                 children: [
-                  const SizedBox(
-                    height: 25,
+                  SizedBox(
+                    height: 25.h,
                   ),
                   Image.asset(
                     'assets/logo.png',
-                    width: 50,
-                    height: 50,
+                    width: 50.w,
+                    height: 50.h,
                     fit: BoxFit.contain,
                   ),
-                  const SizedBox(
-                    height: 35,
+                  SizedBox(
+                    height: 35.h,
                   ),
                   Center(
                     child: Container(
                       margin: const EdgeInsets.only(top: 20),
                       child: Image.asset(
                         'assets/user_icon.png',
-                        width: 200,
-                        height: 200,
+                        width: 200.w,
+                        height: 200.h,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -154,16 +155,16 @@ class _UserInfoState extends State<UserInfo> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF32470F),
                       borderRadius: BorderRadius.circular(
-                          40), // Ajusta el radio del borde aquí
+                          40.r), // Ajusta el radio del borde aquí
                     ),
-                    child: const Center(
+                    child: Center(
                         child: Text(
                       'Editar datos',
                       maxLines: 3,
                       style: TextStyle(
                           fontFamily: 'Roboto',
-                          color: Color.fromARGB(255, 255, 255, 255),
-                          fontSize: 45,
+                          color: const Color.fromARGB(255, 255, 255, 255),
+                          fontSize: 45.sp,
                           fontWeight: FontWeight.bold),
                     )),
                   ),
@@ -181,11 +182,11 @@ class _UserInfoState extends State<UserInfo> {
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
                               labelText: 'Nombres',
-                              labelStyle: const TextStyle(
-                                  fontSize: 28,
+                              labelStyle: TextStyle(
+                                  fontSize: 28.sp,
                                   color: Color.fromARGB(124, 49, 71, 15)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25),
+                                  borderRadius: BorderRadius.circular(25.r),
                                   borderSide: BorderSide.none),
                               suffixIcon: _isNameIconVisible
                                   ? IconButton(
@@ -203,7 +204,7 @@ class _UserInfoState extends State<UserInfo> {
                                       ))
                                   : null,
                             ),
-                            style: const TextStyle(fontSize: 23),
+                            style: TextStyle(fontSize: 23.sp),
                             onFieldSubmitted: (value) {
                               updateUserProfile('nombre', value);
                               setState(() {
@@ -228,11 +229,11 @@ class _UserInfoState extends State<UserInfo> {
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
                               labelText: 'Apellidos',
-                              labelStyle: const TextStyle(
-                                  fontSize: 28,
+                              labelStyle: TextStyle(
+                                  fontSize: 28.sp,
                                   color: Color.fromARGB(124, 49, 71, 15)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25),
+                                  borderRadius: BorderRadius.circular(25.r),
                                   borderSide: BorderSide.none),
                               suffixIcon: _isLastNameIconVisible
                                   ? IconButton(
@@ -250,7 +251,7 @@ class _UserInfoState extends State<UserInfo> {
                                       ))
                                   : null,
                             ),
-                            style: const TextStyle(fontSize: 23),
+                            style: TextStyle(fontSize: 23.sp),
                             onFieldSubmitted: (value) {
                               updateUserProfile('apellido', value);
                               setState(() {
@@ -275,11 +276,11 @@ class _UserInfoState extends State<UserInfo> {
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
                               labelText: 'Email',
-                              labelStyle: const TextStyle(
-                                  fontSize: 28,
+                              labelStyle: TextStyle(
+                                  fontSize: 28.sp,
                                   color: Color.fromARGB(124, 49, 71, 15)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25),
+                                  borderRadius: BorderRadius.circular(25.r),
                                   borderSide: BorderSide.none),
                               suffixIcon: _isMailIconVisible
                                   ? IconButton(
@@ -297,7 +298,7 @@ class _UserInfoState extends State<UserInfo> {
                                       ))
                                   : null,
                             ),
-                            style: const TextStyle(fontSize: 23),
+                            style: TextStyle(fontSize: 23.sp),
                             onFieldSubmitted: (value) {
                               updateUserProfile('correo', value);
                               setState(() {
@@ -337,14 +338,14 @@ class _UserInfoState extends State<UserInfo> {
                               filled: true,
                               fillColor: const Color(0xFFDBE9C9),
                               labelText: 'Contraseña',
-                              labelStyle: const TextStyle(
-                                  fontSize: 28,
+                              labelStyle: TextStyle(
+                                  fontSize: 28.sp,
                                   color: Color.fromARGB(124, 49, 71, 15)),
                               border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(25),
+                                  borderRadius: BorderRadius.circular(25.r),
                                   borderSide: BorderSide.none),
                             ),
-                            style: const TextStyle(fontSize: 23),
+                            style: TextStyle(fontSize: 23.sp),
                             keyboardType: TextInputType.phone,
                             onFieldSubmitted: (value) {
                               updateUserProfile('contraseña', value);
@@ -411,7 +412,7 @@ class _UserInfoState extends State<UserInfo> {
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(25.r),
                     color: const Color(0xFF32470F),
                     boxShadow: [
                       BoxShadow(
@@ -421,8 +422,8 @@ class _UserInfoState extends State<UserInfo> {
                       ),
                     ],
                   ),
-                  height: 60,
-                  width: 60,
+                  height: 60.h,
+                  width: 60.w,
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
@@ -446,7 +447,7 @@ class _UserInfoState extends State<UserInfo> {
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(25.r),
                     color: const Color(0xFF32470F),
                     boxShadow: [
                       BoxShadow(
@@ -455,8 +456,8 @@ class _UserInfoState extends State<UserInfo> {
                           offset: const Offset(0, 3))
                     ],
                   ),
-                  height: 60,
-                  width: 60,
+                  height: 60.h,
+                  width: 60.w,
                   child: Center(
                     child: GestureDetector(
                       onTap: () {
@@ -525,8 +526,8 @@ class _UserInfoState extends State<UserInfo> {
                 offset: const Offset(0, 3))
           ],
         ),
-        height: 90,
-        width: 414,
+        height: 90.h,
+        width: 414.w,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -562,8 +563,8 @@ class _UserInfoState extends State<UserInfo> {
               },
               child: Image.asset(
                 'assets/flowerpot_icon.png',
-                width: 70,
-                height: 70,
+                width: 70.w,
+                height: 70.h,
                 fit: BoxFit.contain,
               ),
             ),
@@ -599,8 +600,8 @@ class _UserInfoState extends State<UserInfo> {
               },
               child: Image.asset(
                 'assets/home_icon.png',
-                width: 70,
-                height: 70,
+                width: 70.w.w,
+                height: 70.h,
                 fit: BoxFit.contain,
               ),
             ),
@@ -608,8 +609,8 @@ class _UserInfoState extends State<UserInfo> {
               onTap: () {},
               child: Image.asset(
                 'assets/user_icon.png',
-                width: 70,
-                height: 70,
+                width: 70.w,
+                height: 70.h,
                 fit: BoxFit.contain,
               ),
             ),
