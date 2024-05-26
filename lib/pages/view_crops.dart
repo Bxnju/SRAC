@@ -332,7 +332,7 @@ class _CropsState extends State<Crops> {
                         const Home(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      var begin = const Offset(0.0, -1.0);
+                      var begin = const Offset(1.0, 0.0);
                       var end = Offset.zero;
                       var curve = Curves.easeInOut;
 

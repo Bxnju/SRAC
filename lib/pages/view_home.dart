@@ -17,7 +17,7 @@ class Home extends StatelessWidget {
               child: ListView(
                 children: [
                   const SizedBox(
-                    height: 120,
+                    height: 100,
                   ),
                   const Column(
                     children: [
@@ -107,6 +107,32 @@ class Home extends StatelessWidget {
                                 ),
                               ],
                             )),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 100,
+                    margin: const EdgeInsets.only(top: 50),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(25),
+                          bottomRight: Radius.circular(25),
+                          bottomLeft: Radius.circular(25),
+                          topLeft: Radius.circular(25)),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topRight: Radius.circular(25),
+                        bottomRight: Radius.circular(25),
+                        bottomLeft: Radius.circular(25),
+                        topLeft: Radius.circular(25),
+                      ),
+                      child: Image.asset(
+                        'assets/huerto.png',
+                        width: 100,
+                        height: 400,
+                        fit: BoxFit.cover,
                       ),
                     ),
                   )

@@ -37,6 +37,7 @@ flutter:
     - assets/cebolla.png
     - assets/perejil.png
     - assets/cilantro.png
+    - assets/huerto.png
 
   # fonts:
   #   - family: Schyler
