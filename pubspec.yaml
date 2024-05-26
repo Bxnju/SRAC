@@ -10,8 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  
+  community_charts_flutter: ^1.0.4
   cupertino_icons: ^1.0.2
+  firebase_core: ^2.31.0
+  cloud_firestore: ^4.17.3
 
 dev_dependencies:
   flutter_test:
@@ -29,6 +32,12 @@ flutter:
     - assets/user_icon.png
     - assets/home_icon.png
     - assets/flowerpot_icon.png
+    - assets/tomate.png
+    - assets/lechuga.png
+    - assets/cebolla.png
+    - assets/perejil.png
+    - assets/cilantro.png
+    - assets/huerto.png
 
   # fonts:
   #   - family: Schyler

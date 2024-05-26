@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:srac_app/pages/view_login.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,15 +17,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        primaryColor: Colors.blue,
-        useMaterial3: true,
-        primarySwatch: Colors.blue,
-      ),
-      home: const Login()
-    );
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: 'Poppins',
+          primaryColor: Colors.green,
+          useMaterial3: true,
+          primarySwatch: Colors.green,
+        ),
+        home: const Login());
   }
 }
 
