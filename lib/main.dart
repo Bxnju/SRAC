@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:srac_app/pages/view_login.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -12,19 +13,24 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          fontFamily: 'Poppins',
-          primaryColor: Colors.green,
-          useMaterial3: true,
-          primarySwatch: Colors.green,
-        ),
-        home: const Login());
+    return ScreenUtilInit(
+      designSize:
+          const Size(414, 896), // Define el tamaño de diseño base de tu UI
+      builder: (context, child) {
+        return MaterialApp(
+            title: 'SRAC',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              fontFamily: 'Poppins',
+              primaryColor: Colors.green,
+              useMaterial3: true,
+              primarySwatch: Colors.green,
+            ),
+            home: const Login());
+      },
+    );
   }
 }
 

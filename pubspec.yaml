@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   
+  flutter_screenutil: ^5.0.0+2
   community_charts_flutter: ^1.0.4
   cupertino_icons: ^1.0.2
   firebase_core: ^2.31.0

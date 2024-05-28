@@ -131,7 +131,7 @@ class Home extends StatelessWidget {
                       child: Image.asset(
                         'assets/huerto.png',
                         width: 100,
-                        height: 400,
+                        height: 350,
                         fit: BoxFit.cover,
                       ),
                     ),

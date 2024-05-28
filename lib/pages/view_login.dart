@@ -36,6 +36,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: const Color(0xFFBFD4A4),
         body: Stack(
           children: [
@@ -52,7 +53,7 @@ class _LoginState extends State<Login> {
                       Center(
                         child: Image.asset(
                           'assets/logo.png',
-                          width: 380,
+                          width: 360,
                           height: 180,
                           fit: BoxFit.contain,
                         ),

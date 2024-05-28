@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:srac_app/pages/view_home.dart';
 import 'package:srac_app/pages/view_user_info.dart';
+import 'dart:math';
 import 'package:srac_app/pages/view_crops.dart';
 import 'package:community_charts_flutter/community_charts_flutter.dart'
     as charts;
@@ -337,41 +338,35 @@ class CropChart extends StatelessWidget {
       children: [
         ChartContainer(
           title: "Humedad a través del tiempo",
-          data: [
-            TimeSeriesData(DateTime(2024, 1, 1), 75),
-            TimeSeriesData(DateTime(2024, 2, 1), 80),
-            TimeSeriesData(DateTime(2024, 3, 1), 65),
-            TimeSeriesData(DateTime(2024, 4, 1), 70),
-            TimeSeriesData(DateTime(2024, 5, 1), 85),
-          ],
+          data: generateRandomData(5, 60, 90), // Generar 5 puntos entre 60 y 90
         ),
         ChartContainer(
           title: "Riego de agua a través del tiempo",
-          data: [
-            TimeSeriesData(DateTime(2024, 1, 1), 0.5),
-            TimeSeriesData(DateTime(2024, 2, 1), 0.1),
-            TimeSeriesData(DateTime(2024, 3, 1), 0.071),
-            TimeSeriesData(DateTime(2024, 4, 1), 0.1),
-            TimeSeriesData(DateTime(2024, 5, 1), 0.3),
-          ],
+          data: generateRandomData(
+              5, 0.05, 0.5), // Generar 5 puntos entre 0.05 y 0.5
         ),
         ChartContainer(
-          title: "Temperatura del suelo a través del tiempo",
-          data: [
-            TimeSeriesData(DateTime(2024, 1, 1), 15),
-            TimeSeriesData(DateTime(2024, 2, 1), 10),
-            TimeSeriesData(DateTime(2024, 3, 1), 30),
-            TimeSeriesData(DateTime(2024, 4, 1), 22),
-            TimeSeriesData(DateTime(2024, 5, 1), 28),
-            TimeSeriesData(DateTime(2024, 6, 1), 11),
-            TimeSeriesData(DateTime(2024, 7, 1), 38),
-            TimeSeriesData(DateTime(2024, 8, 1), 42),
-            TimeSeriesData(DateTime(2024, 9, 1), 30),
-            TimeSeriesData(DateTime(2024, 10, 1), 11),
-          ],
+          title: "Temperatura a través del tiempo",
+          data:
+              generateRandomData(10, 10, 40), // Generar 10 puntos entre 10 y 40
         ),
       ],
     );
+  }
+
+  List<TimeSeriesData> generateRandomData(int count, double min, double max) {
+    List<TimeSeriesData> data = [];
+    Random random = Random();
+    DateTime now = DateTime.now();
+    DateTime startOfDay = DateTime(now.year, now.month, now.day);
+
+    for (int i = 0; i < count; i++) {
+      DateTime time = startOfDay.add(Duration(days: i));
+      double value = min + random.nextDouble() * (max - min);
+      data.add(TimeSeriesData(time, value));
+    }
+
+    return data;
   }
 }
 
@@ -425,17 +420,34 @@ class ChartContainer extends StatelessWidget {
               animate: true,
               dateTimeFactory: const charts.LocalDateTimeFactory(),
               behaviors: [
+                charts.SeriesLegend(
+                  position: charts.BehaviorPosition.bottom,
+                  outsideJustification:
+                      charts.OutsideJustification.middleDrawArea,
+                ),
                 charts.ChartTitle('Fecha',
                     behaviorPosition: charts.BehaviorPosition.bottom,
                     titleOutsideJustification:
                         charts.OutsideJustification.middleDrawArea,
                     innerPadding: 18),
-                charts.ChartTitle('Valor (°C / % / L)',
+                charts.ChartTitle(
+                    title.contains('Humedad')
+                        ? 'Humedad (%)'
+                        : title.contains('Riego')
+                            ? 'Riego (L)'
+                            : 'Temperatura (°C)',
                     behaviorPosition: charts.BehaviorPosition.start,
                     titleOutsideJustification:
                         charts.OutsideJustification.middleDrawArea,
                     innerPadding: 18),
               ],
+              defaultRenderer: charts.LineRendererConfig<DateTime>(
+                includePoints: true,
+                includeArea: true,
+                stacked: false,
+                radiusPx: 4.0,
+                strokeWidthPx: 2.0,
+              ),
               primaryMeasureAxis: charts.NumericAxisSpec(
                 renderSpec: charts.GridlineRendererSpec(
                   lineStyle: charts.LineStyleSpec(
