@@ -1,16 +1,9 @@
-# srac_app
+Aplicacion movil realizada en Flutter para monitorear huertas verticales con sensores de humedad y temperatura.
+La aplicación consume una base de datos en Firebase de Google.
 
-A new Flutter project.
+Realizada por Andres Benjumea Reinoso para el curso de proyecto aplicado en TIC 1 del programa de pregrado
+Ingenieria en Sistemas e Informatica de la Universidad Pontificia Bolivariana, sede Medellín.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Prototipo funcional de software que permite monitorear el estado de las diferentes plantas 
+de una huerta, dado la información entregada por unos sensores conectados a una base de datos en Firebase.
+Son sensores de humedad y temperatura que medirán el estado de las plantas.
